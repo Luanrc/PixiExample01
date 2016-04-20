@@ -1,49 +1,51 @@
-<!DOCTYPE html>
 <html>
-<head>
-	<title>Pixi Example</title>
-	<style>
-		body {
-			margin: 0;
-			padding: 0;
-			background-color: #000000;
-		}
-	</style>
-	<script src= "js/pixi.js"></script>
-</head>
-<body> 
-	<script>
-	
-	var stage = new PIXI.Stage(0x66FF99);
+	<head>
+		<meta charset="UTF-8">
+		<title>Parallax Scrolling Demo</title>
+		    <style>
+		      body { background-color: #000000; }
+		      canvas { background-color: #222222; }
+		    </style>
+	</head>
+	<body onload="init() ;">
+		<div align="center">
+			<canvas id= "game-canvas" width="512" height="384"></canvas>
+		</div>
+		<script src="pixi.js-master/bin/pixi.dev.js"></script>
+		<script>
+			function init() {
+				stage = new PIXI.Stage(0x66FF99);
+				renderer = PIXI.autoDetectRenderer(512,384, {view: document.getElementById("game-canvas")}
+					);
 
-	var renderer = PIXI.autoDetectRenderer(400,300);
+				var farTexture = PIXI.Texture.fromImage("resources/bg-far.png");
+				far = new PIXI.TilingSprite(farTexture, 512, 256);
+				far.position.x = 0;
+				far.position.y = 0;
+				far.tilePosition.x = 0;
+				far.tilePosition.y = 0;
+				
+				stage.addChild(far);
 
-	document.body.appendChild(renderer.view);
+				var midTexture = PIXI.Texture.fromImage("resources/bg-mid.png");
+				mid = new PIXI.TilingSprite(midTexture, 512, 256);
+				mid.position.x = 0;
+				mid.position.y = 128;
+				mid.tilePosition.x = 0;
+				mid.tilePosition.y = 0;
+				stage.addChild(mid);
+				
+				requestAnimFrame(update);
+			}
 
-	requestAnimFrame ( animate );
+			function update() {
+				far.tilePosition.x -= 0.128;
+				mid.tilePosition.x -= 0.64;
 
-	var texture = PIXI.Texture.fromImage("img/bunny.png");
-	var bunny = new PIXI.Sprite(texture);
+				renderer.render(stage);
 
-	bunny.anchor.x = 0.5;
-	bunny.anchor.y = 0.5;
-
-	bunny.position.x = 200;
-	bunny.position.y = 150;
-
-	stage.addChild(bunny);
-
-	function animate() {
-		requestAnimFrame ( animate );
-
-		bunny.rotation += 0.1;
-
-		renderer.render(stage);
-	}
-
-
-	</script>
-
-
-</body>
+				requestAnimFrame(update);
+			}
+		</script>
+	</body>
 </html>
